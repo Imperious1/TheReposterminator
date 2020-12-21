@@ -101,11 +101,11 @@ class BotClient:
         """Runs the bot
         This function is entirely blocking, so any calls to other functions must
         be made prior to calling this."""
-        dm_check = True
+        initial_dm_check = True
         while True:
-            if dm_check and len(self.subreddits) < 1:
+            if initial_dm_check and len(self.subreddits) < 1:
                 self.handle_dms()
-                dm_check = True
+                initial_dm_check = False
             
             for sub in self.subreddits:
                 self.handle_dms()
