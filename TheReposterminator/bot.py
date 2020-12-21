@@ -101,7 +101,12 @@ class BotClient:
         """Runs the bot
         This function is entirely blocking, so any calls to other functions must
         be made prior to calling this."""
+        dm_check = True
         while True:
+            if dm_check and len(self.subreddits) < 1:
+                self.handle_dms()
+                dm_check = True
+            
             for sub in self.subreddits:
                 self.handle_dms()
                 if not sub.indexed:
@@ -238,7 +243,7 @@ class BotClient:
             if msg.body.startswith(('**gadzooks!', 'gadzooks!')) \
                     or 'invitation to moderate' in msg.subject:
                 self.accept_invite(msg)
-            elif "You have been removed as a moderator from " in msg.body:
+            elif "You have been removed as a moderator from " in msg.body and msg.subreddit != None:
                 self.handle_mod_removal(msg)
             msg.mark_read()
 
